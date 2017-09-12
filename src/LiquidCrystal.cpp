@@ -105,7 +105,9 @@ void LiquidCrystal::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
   // according to datasheet, we need at least 40ms after power rises above 2.7V
   // before sending commands. Arduino can turn on way before 4.5V so we'll wait 50
   delayMicroseconds(50000); 
+  
   // Now we pull both RS and R/W low to begin commands
+  // FIXME: Add inversion logic here
   digitalWrite(_rs_pin, LOW);
   digitalWrite(_enable_pin, LOW);
   if (_rw_pin != 255) { 
@@ -278,13 +280,14 @@ inline void LiquidCrystal::command(uint8_t value) {
 
 inline size_t LiquidCrystal::write(uint8_t value) {
   send(value, HIGH);
-  return 1; // assume sucess
+  return 1; // assume success
 }
 
 /************ low level data pushing commands **********/
 
 // write either command or data, with automatic 4/8-bit selection
 void LiquidCrystal::send(uint8_t value, uint8_t mode) {
+  // FIXME: Add inversion logic here
   digitalWrite(_rs_pin, mode);
 
   // if there is a RW pin indicated, set it low to Write
@@ -301,6 +304,7 @@ void LiquidCrystal::send(uint8_t value, uint8_t mode) {
 }
 
 void LiquidCrystal::pulseEnable(void) {
+  // FIXME: Add inversion logic here
   digitalWrite(_enable_pin, LOW);
   delayMicroseconds(1);    
   digitalWrite(_enable_pin, HIGH);
@@ -310,6 +314,7 @@ void LiquidCrystal::pulseEnable(void) {
 }
 
 void LiquidCrystal::write4bits(uint8_t value) {
+  // FIXME: Add inversion logic here
   for (int i = 0; i < 4; i++) {
     digitalWrite(_data_pins[i], (value >> i) & 0x01);
   }
@@ -318,6 +323,7 @@ void LiquidCrystal::write4bits(uint8_t value) {
 }
 
 void LiquidCrystal::write8bits(uint8_t value) {
+  // FIXME: Add inversion logic here
   for (int i = 0; i < 8; i++) {
     digitalWrite(_data_pins[i], (value >> i) & 0x01);
   }
